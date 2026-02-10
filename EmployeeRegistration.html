@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Registration</title>
+</head>
+<body>
+    <h2 style="text-align: center;">Employee Registration Form</h2><br>
+    <form id="empForm">
+        <label>Employee Name: <input type="text" id="empName"></label><br><br>
+
+        <label>Email: <input type="email" id="email"></label><br><br>
+
+        <label>Password: <input type="password" id="pwd" oninput="checkStrength(this.value)"></label>
+        <span id="strengthMsg"></span><br><br>
+
+        <label>Mobile Number: <input type="text" id="mobile"></label><br><br>
+
+        <label>Gender: 
+            <input type="radio" name="gender" value="Male"> Male
+            <input type="radio" name="gender" value="Female"> Female
+        </label><br><br>
+
+        <label>Department: 
+            <select id="dept">
+                <option value="">Select Department--</option>
+                <option value="IT">IT</option>
+                <option value="HR">HR</option>
+            </select>
+        </label><br><br>
+
+        <label>Skills:<br>
+            <input type="checkbox" name="skill" value="JS"> JavaScript
+            <input type="checkbox" name="skill" value="HTML"> HTML
+            <input type="checkbox" name="skill" value="CSS"> CSS
+            <input type="checkbox" name="skill" value="Java"> Java
+            <input type="checkbox" name="skill" value="Python"> Python
+        </label><br><br>
+
+        <button type="submit">Register</button>
+    </form>
+
+    <script>
+        function checkStrength(val) {
+            let msg = document.getElementById('strengthMsg');
+            if (val.length === 0) msg.innerText = "";
+            else if (val.length < 6) msg.innerText = " (Weak)";
+            else if (/[A-Z]/.test(val) && /[!@#$%^&*]/.test(val)) msg.innerText = " (Strong)";
+            else if (/[0-9]/.test(val) && /[a-z]/.test(val)) msg.innerText = " (Medium)";
+        }
+
+        document.getElementById('empForm').onsubmit = function(e) {
+            e.preventDefault();
+            let errors = [];
+            
+            const name = document.getElementById('empName').value;
+            if(!/^[A-Za-z\s]{3,}$/.test(name)) { 
+                errors.push("Name: Minimum 3 alphabets required");
+            }
+
+            const email = document.getElementById('email').value;
+            if(!email.includes("@")) {
+                errors.push("Email: Please enter a valid email");
+            }
+
+            const mob = document.getElementById('mobile').value;
+            if(!/^\d{10}$/.test(mob)) { 
+                errors.push("Mobile: Must be exactly 10 digits");
+            }
+
+            if(!document.querySelector('input[name="gender"]:checked')) {
+                errors.push("Gender: Please select your gender");
+            }
+
+            if(document.getElementById('dept').value === "") {
+                errors.push("Department: Please select a department");
+            }
+
+            const skills = document.querySelectorAll('input[name="skill"]:checked');
+            if(skills.length === 0) {
+                errors.push("Skills: Select at least one skill");
+            }
+
+            if(errors.length > 0) {
+                alert("Please correct the following:\n\n" + errors.join("\n"));
+            } else {
+                alert("Registration Successful!");
+            }
+        };
+    </script>
+</body>
+</html>
